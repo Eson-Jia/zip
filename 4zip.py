@@ -7,9 +7,8 @@ import sys
 import zipfile
 
 nameMap = {}
-the_reg = re.compile('(.{2,4}?).*?([789七八九])([上下]).+?(\d{1,2})')
+the_reg = re.compile('(.{2,4}?).*?([789七八九])([上下]).*?(\d{1,2})')
 ignore = ('zip')
-package_size = 1
 
 
 def findSignature(name: str) -> tuple:
@@ -37,7 +36,8 @@ for file in os.listdir('./'):
         nameMap[name] = []
     nameMap[name].append(file)
 for name, files in nameMap.items():
-    if len(files) >= package_size:
+    if len(files) < 2:
+        print('unmatch file:{files}')
         continue
     z = zipfile.ZipFile(Signature2String(name)+'.zip',
                         'w', zipfile.ZIP_DEFLATED)
